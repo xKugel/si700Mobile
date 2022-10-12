@@ -101,16 +101,17 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
         final result = await FlutterBarcodeScanner.scanBarcode(
           '#ff6666', "Cancelar", true, ScanMode.QR);
 
-        table.number = int.parse(result);
+        if(int.parse(result) != -1) {
 
-        print(table.number);
+          table.number = int.parse(result);
 
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            backgroundColor: Colors.green,
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              backgroundColor: Colors.green,
               content: Text("Mesa atribuída: ${table.number}"),
-          ),
-        );
+            ),
+          );
+        }
 
       } on PlatformException {
         print("Qr code falhou");
