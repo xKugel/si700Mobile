@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:teste/screens/QRCodeScreen.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+import 'package:teste/screens/MenuScreen.dart';
+import 'package:teste/screens/OrderScreen.dart';
+import 'package:teste/screens/PaymentScreen.dart';
+import 'package:teste/data/data.dart';
 
 void main() {
   runApp(const MyApp());
@@ -32,18 +37,9 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static const List<Widget> _widgetOptions = <Widget>[
-    Text(
-      'Index 0: Home',
-      style: optionStyle,
-    ),
-    Text(
-      'Index 1: Business',
-      style: optionStyle,
-    ),
-    Text(
-      'Index 2: School',
-      style: optionStyle,
-    ),
+    MenuScreen(),
+    OrderScreen(),
+    PaymentScreen(),
   ];
 
   void _onItemTapped(int index) {
@@ -58,10 +54,21 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
       appBar: AppBar(
         title: const Text('Garçonapp'),
         actions: [
-          new IconButton(onPressed: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => QRCodeScreen()));
-          }, icon: Icon(Icons.qr_code)),
-          new IconButton(onPressed: () {}, icon: Icon(Icons.notifications_active)),
+          new IconButton(
+              onPressed: () {
+                scanQRCode();
+              },
+              icon: Icon(Icons.qr_code)),
+          new IconButton(
+              onPressed: () {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    backgroundColor: Colors.green,
+                    content: Text("Garçom a caminho da mesa ${table.number}"),
+                  ),
+                );
+              },
+              icon: Icon(Icons.notifications_active)),
         ],
       ),
       body: Center(
@@ -88,4 +95,25 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
       ),
     );
   }
+
+    void scanQRCode() async {
+      try {
+        final result = await FlutterBarcodeScanner.scanBarcode(
+          '#ff6666', "Cancelar", true, ScanMode.QR);
+
+        table.number = int.parse(result);
+
+        print(table.number);
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: Colors.green,
+              content: Text("Mesa atribuída: ${table.number}"),
+          ),
+        );
+
+      } on PlatformException {
+        print("Qr code falhou");
+      }
+    }
 }
