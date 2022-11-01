@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:teste/bloc/manage_bloc.dart';
 import 'package:teste/data/data.dart';
 import 'package:teste/models/OrderModel.dart';
 
@@ -12,33 +14,38 @@ class OrderScreen extends StatefulWidget {
 class _OrderScreenState extends State<OrderScreen> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        SizedBox(
-          height: 20,
-        ),
-        Expanded(
-            child: ListView.builder(
-                itemCount: order.length,
-                itemBuilder: ((context, index) {
-                  return _buildOrderItem(order[index]);
-                }))),
-        ElevatedButton(
-            onPressed: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  backgroundColor: Colors.green,
-                  content: Text("Pedido realizado para a mesa ${table.number}"),
-                ),
-              );
-            },
-            child: Text("Fazer Pedido",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600))),
-        SizedBox(
-          height: 80,
-        )
-      ],
-    );
+    return BlocBuilder<ManageBloc, ManageState>(builder: ((context, state) {
+      return Column(
+        children: [
+          SizedBox(
+            height: 20,
+          ),
+          Expanded(
+              child: ListView.builder(
+                  itemCount: order.length,
+                  itemBuilder: ((context, index) {
+                    return _buildOrderItem(order[index]);
+                  }))),
+          ElevatedButton(
+              onPressed: () {
+                print('teste');
+                BlocProvider.of<ManageBloc>(context).add(SubmitEvent());
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    backgroundColor: Colors.green,
+                    content:
+                        Text("Pedido realizado para a mesa ${table.number}"),
+                  ),
+                );
+              },
+              child: Text("Fazer Pedido",
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600))),
+          SizedBox(
+            height: 80,
+          )
+        ],
+      );
+    }));
   }
 }
 

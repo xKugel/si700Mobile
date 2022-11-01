@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:teste/bloc/manage_bloc.dart';
+import 'package:teste/provider/local_database.dart';
 import 'package:teste/screens/MenuScreen.dart';
 import 'package:teste/screens/OrderScreen.dart';
 import 'package:teste/screens/PaymentScreen.dart';
@@ -71,8 +74,11 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
               icon: Icon(Icons.notifications_active)),
         ],
       ),
-      body: Center(
-        child: _widgetOptions.elementAt(_selectedIndex),
+      body: MultiBlocProvider(
+        providers: [BlocProvider(create: (_) => ManageBloc())],
+        child: Center(
+          child: _widgetOptions.elementAt(_selectedIndex),
+        ),
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
@@ -96,25 +102,23 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
     );
   }
 
-    void scanQRCode() async {
-      try {
-        final result = await FlutterBarcodeScanner.scanBarcode(
+  void scanQRCode() async {
+    try {
+      final result = await FlutterBarcodeScanner.scanBarcode(
           '#ff6666', "Cancelar", true, ScanMode.QR);
 
-        if(int.parse(result) != -1) {
+      if (int.parse(result) != -1) {
+        table.number = int.parse(result);
 
-          table.number = int.parse(result);
-
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              backgroundColor: Colors.green,
-              content: Text("Mesa atribuída: ${table.number}"),
-            ),
-          );
-        }
-
-      } on PlatformException {
-        print("Qr code falhou");
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: Colors.green,
+            content: Text("Mesa atribuída: ${table.number}"),
+          ),
+        );
       }
+    } on PlatformException {
+      print("Qr code falhou");
     }
+  }
 }
