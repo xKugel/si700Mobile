@@ -1,8 +1,8 @@
-import 'package:teste/models/OrderModel.dart';
+import 'package:teste/models/OrderItemModel.dart';
 
 class TableModel {
   int number;
-  List<OrderModel> orders;
+  List<OrderItemModel> orders;
 
   TableModel({required this.number, required this.orders});
 }
