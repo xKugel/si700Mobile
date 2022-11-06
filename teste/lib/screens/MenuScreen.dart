@@ -1,7 +1,10 @@
-import 'package:teste/data/data.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:teste/bloc/cart_bloc.dart';
+import 'package:teste/bloc/monitor_item_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:teste/main.dart';
 import 'package:teste/models/MenuItemModel.dart';
+import 'package:teste/models/MenuItensModel.dart';
 
 class MenuScreen extends StatefulWidget {
   const MenuScreen({Key? key}) : super(key: key);
@@ -13,11 +16,17 @@ class MenuScreen extends StatefulWidget {
 class _MenuScreenState extends State<MenuScreen> {
   @override
   Widget build(BuildContext context) {
+    return BlocBuilder<MonitorItemBloc, MonitorItemState>(
+      builder: (context, state) => getItensListView(state.itensCollection),
+    );
+  }
+
+  ListView getItensListView(MenuItensModel itensCollection) {
     return ListView.builder(
-        itemCount: menu.length,
-        itemBuilder: ((context, index) {
-          return _buildMenuItem(menu[index]);
-        }));
+      itemCount: itensCollection.length(),
+      itemBuilder: ((context, index) =>
+          _buildMenuItem(itensCollection.getNodeAtIndex(index))),
+    );
   }
 
   Widget _buildMenuItem(MenuItemModel menuItem) {
@@ -42,7 +51,7 @@ class _MenuScreenState extends State<MenuScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        menuItem.description,
+                        menuItem.name,
                         style: TextStyle(
                             fontSize: 22, fontWeight: FontWeight.w600),
                       ),
@@ -63,15 +72,17 @@ class _MenuScreenState extends State<MenuScreen> {
                 decoration: BoxDecoration(
                     color: Colors.green,
                     borderRadius: BorderRadius.circular(30)),
-                    child: IconButton(
+                child: IconButton(
                     onPressed: () {
+                      BlocProvider.of<CartBloc>(context)
+                          .add(InsertCartEvent(item: menuItem));
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           backgroundColor: Colors.green,
-                          content: Text(
-                            "${menuItem.description} adicionado ao pedido da mesa ${table.number}"),
-                          ),
-                       );
+                          content:
+                              Text("${menuItem.name} adicionado ao carrinho"),
+                        ),
+                      );
                     },
                     icon: Icon(
                       Icons.add,

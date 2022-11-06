@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:teste/bloc/cart_bloc.dart';
+import 'package:teste/bloc/monitor_item_bloc.dart';
+import 'package:teste/bloc/monitor_order_bloc.dart';
+import 'package:teste/components/HomeAppBar.dart';
+import 'package:teste/provider/local_database.dart';
 import 'package:teste/screens/MenuScreen.dart';
 import 'package:teste/screens/OrderScreen.dart';
 import 'package:teste/screens/PaymentScreen.dart';
-import 'package:teste/data/data.dart';
 
 void main() {
   runApp(const MyApp());
@@ -50,71 +55,41 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Garçonapp'),
-        actions: [
-          new IconButton(
-              onPressed: () {
-                scanQRCode();
-              },
-              icon: Icon(Icons.qr_code)),
-          new IconButton(
-              onPressed: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    backgroundColor: Colors.green,
-                    content: Text("Garçom a caminho da mesa ${table.number}"),
-                  ),
-                );
-              },
-              icon: Icon(Icons.notifications_active)),
-        ],
-      ),
-      body: Center(
-        child: _widgetOptions.elementAt(_selectedIndex),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.fastfood),
-            label: 'Cardápio',
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (_) => MonitorOrderBloc()),
+        BlocProvider(create: (_) => CartBloc()),
+      ],
+      child: Scaffold(
+        appBar: new HomeAppBar(),
+        body: MultiBlocProvider(
+          providers: [
+            BlocProvider(create: (_) => MonitorItemBloc()),
+          ],
+          child: Center(
+            child: _widgetOptions.elementAt(_selectedIndex),
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.task),
-            label: 'Pedido',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.payment),
-            label: 'Pagamento',
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.green,
-        onTap: _onItemTapped,
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+          items: const <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: Icon(Icons.fastfood),
+              label: 'Cardápio',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.task),
+              label: 'Pedido',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.payment),
+              label: 'Pagamento',
+            ),
+          ],
+          currentIndex: _selectedIndex,
+          selectedItemColor: Colors.green,
+          onTap: _onItemTapped,
+        ),
       ),
     );
   }
-
-    void scanQRCode() async {
-      try {
-        final result = await FlutterBarcodeScanner.scanBarcode(
-          '#ff6666', "Cancelar", true, ScanMode.QR);
-
-        if(int.parse(result) != -1) {
-
-          table.number = int.parse(result);
-
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              backgroundColor: Colors.green,
-              content: Text("Mesa atribuída: ${table.number}"),
-            ),
-          );
-        }
-
-      } on PlatformException {
-        print("Qr code falhou");
-      }
-    }
 }
