@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:http/http.dart' show get;
 
 import '../bloc/manage_bloc.dart';
 
@@ -23,24 +24,26 @@ class ListNote extends StatelessWidget {
   ListView getNoteListView(NoteCollection noteCollection) {
     return ListView.builder(
         itemCount: noteCollection.length(),
-        itemBuilder: (context, position) => ListTile(
-              onTap: () {
-                //print(noteCollection.getIdAtIndex(position));
-                BlocProvider.of<ManageBloc>(context).add(UpdateRequest(
-                  noteId: noteCollection.getIdAtIndex(position),
-                  previousNote: noteCollection.getNoteAtIndex(position),
-                ));
-              },
-              leading: Icon(icons[position % icons.length]),
-              trailing: GestureDetector(
-                  onTap: () {
-                    BlocProvider.of<ManageBloc>(context).add(DeleteEvent(
-                        noteId: noteCollection.getIdAtIndex(position)));
-                  },
-                  child: const Icon(Icons.delete)),
-              title: Text(noteCollection.getNoteAtIndex(position).title),
-              subtitle:
-                  Text(noteCollection.getNoteAtIndex(position).description),
-            ));
+        itemBuilder: (context, position) {
+          return ListTile(
+            onTap: () {
+              BlocProvider.of<ManageBloc>(context).add(UpdateRequest(
+                noteId: noteCollection.getIdAtIndex(position),
+                previousNote: noteCollection.getNoteAtIndex(position),
+              ));
+            },
+            leading: noteCollection.getNoteAtIndex(position).path != ""
+                ? Image.network(noteCollection.getNoteAtIndex(position).path)
+                : Icon(icons[position % icons.length]),
+            trailing: GestureDetector(
+                onTap: () {
+                  BlocProvider.of<ManageBloc>(context).add(DeleteEvent(
+                      noteId: noteCollection.getIdAtIndex(position)));
+                },
+                child: const Icon(Icons.delete)),
+            title: Text(noteCollection.getNoteAtIndex(position).title),
+            subtitle: Text(noteCollection.getNoteAtIndex(position).description),
+          );
+        });
   }
 }

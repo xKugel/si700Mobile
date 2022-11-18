@@ -1,5 +1,7 @@
 import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/services.dart';
+import 'package:universal_html/html.dart' as html;
 
 class StorageServer {
   // Atributo que irá afunilar todas as consultas
@@ -9,10 +11,10 @@ class StorageServer {
 
   Reference noteImage = FirebaseStorage.instance.ref().child("images");
 
-  UploadTask? insertImage(String uid, String noteId, String path) {
+  UploadTask? insertImage(String uid, String noteId, Uint8List? path) {
     try {
       var ref = noteImage.child(uid).child(noteId + ".jpeg");
-      return ref.putFile(File(path));
+      return ref.putData(path!);
     } on FirebaseException {
       return null;
     }

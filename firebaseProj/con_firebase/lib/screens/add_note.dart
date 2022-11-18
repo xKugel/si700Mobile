@@ -1,6 +1,12 @@
+import 'dart:io';
+
+import 'package:image_picker/image_picker.dart';
+import 'package:universal_html/html.dart' as html;
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker_web/image_picker_web.dart';
+import 'package:path_provider/path_provider.dart';
 
 import '../model/note.dart';
 import '../bloc/manage_bloc.dart';
@@ -10,6 +16,8 @@ class AddNote extends StatelessWidget {
 
   final GlobalKey<FormState> formKey = GlobalKey();
   final Note note = Note();
+  final ImagePicker _picker = ImagePicker();
+  File? _photo;
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +34,7 @@ class AddNote extends StatelessWidget {
             children: [
               tituloFormField(note),
               descriptionFormField(note),
-              filePickerButton(note),
+              filePickerButton(note, state),
               submitButton(note, context, state),
               cancelButton(note, context, state),
             ],
@@ -105,18 +113,15 @@ class AddNote extends StatelessWidget {
         : Container());
   }
 
-  Widget filePickerButton(Note note) {
+  Widget filePickerButton(Note note, ManageState state) {
     return ElevatedButton(
         child: Text("Escolha uma imagem"),
         onPressed: () async {
-          final result = await ImagePickerWeb.getImageAsBytes();
-          //final imgPath = Image.memory(result).path;
-
-          if (result != null) {
-            print(result);
+          final pickedFile =
+              await _picker.pickImage(source: ImageSource.gallery);
+          if (pickedFile != null) {
+            note.img = await pickedFile.readAsBytes();
           }
-
         });
   }
-
 }

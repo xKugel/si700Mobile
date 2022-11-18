@@ -35,9 +35,9 @@ class FirestoreDatabase {
       "description": note.description,
       "path": note.path
     });
-    if (note.path != "") {
+    if (note.img != null) {
       UploadTask? task =
-          StorageServer.helper.insertImage(uid!, ref.id, note.path);
+          StorageServer.helper.insertImage(uid!, ref.id, note.img!);
       if (task != null) {
         var snapshot = await task.whenComplete(() {});
         note.path = await snapshot.ref.getDownloadURL();
@@ -60,7 +60,7 @@ class FirestoreDatabase {
   Future<int> updateNote(noteId, Note note) async {
     if (note.path != "") {
       UploadTask? task =
-          StorageServer.helper.insertImage(uid!, noteId, note.path);
+          StorageServer.helper.insertImage(uid!, noteId, note.img!);
       if (task != null) {
         var snapshot = await task.whenComplete(() {});
         note.path = await snapshot.ref.getDownloadURL();
