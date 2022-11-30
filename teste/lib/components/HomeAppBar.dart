@@ -4,6 +4,8 @@ import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:teste/bloc/cart_bloc.dart';
 import 'package:teste/bloc/monitor_order_bloc.dart';
+import 'package:teste/bloc/auth_bloc.dart';
+import 'package:teste/screens/Wrapper.dart';
 
 Future<int> scanQRCode(context, currentTableNumber) async {
   try {
@@ -54,6 +56,17 @@ class HomeAppBar extends StatelessWidget with PreferredSizeWidget {
                   );
                 },
                 icon: Icon(Icons.notifications_active)),
+            new IconButton(
+                onPressed: () {
+                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => MultiBlocProvider(providers: [
+                    BlocProvider(create: (context) => AuthBloc()),
+                      ], child: const Wrapper()))
+                  );
+                  // Navigator.of(context).push(MaterialPageRoute(builder: (context) => MultiBlocProvider(providers: [
+                  //   BlocProvider(create: (context) => AuthBloc()),
+                  // ], child: const Wrapper()));));
+                },
+                icon: Icon(Icons.supervised_user_circle)),
           ],
         ),
         preferredSize: Size.fromHeight(72));

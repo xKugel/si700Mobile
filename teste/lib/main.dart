@@ -10,8 +10,18 @@ import 'package:teste/provider/local_database.dart';
 import 'package:teste/screens/MenuScreen.dart';
 import 'package:teste/screens/OrderScreen.dart';
 import 'package:teste/screens/PaymentScreen.dart';
+import 'package:firebase_core/firebase_core.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: FirebaseOptions(
+    apiKey: "AIzaSyDF9F0F2w5GsUL2Pxw2y7uJ0EQ611TCBkU",
+    authDomain: "garconapp-e2991.firebaseapp.com",
+    projectId: "garconapp-e2991",
+    storageBucket: "garconapp-e2991.appspot.com",
+    messagingSenderId: "870452793362",
+    appId: "1:870452793362:web:12a1a5225ffadb3de348cb"
+  ));
   runApp(const MyApp());
 }
 
@@ -24,6 +34,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: _title,
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(primarySwatch: Colors.green),
       home: const MyStatefulWidget(),
     );
