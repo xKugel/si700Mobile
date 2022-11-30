@@ -14,14 +14,14 @@ import 'package:firebase_core/firebase_core.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: FirebaseOptions(
-    apiKey: "AIzaSyDF9F0F2w5GsUL2Pxw2y7uJ0EQ611TCBkU",
-    authDomain: "garconapp-e2991.firebaseapp.com",
-    projectId: "garconapp-e2991",
-    storageBucket: "garconapp-e2991.appspot.com",
-    messagingSenderId: "870452793362",
-    appId: "1:870452793362:web:12a1a5225ffadb3de348cb"
-  ));
+  await Firebase.initializeApp(
+      options: FirebaseOptions(
+          apiKey: "AIzaSyDF9F0F2w5GsUL2Pxw2y7uJ0EQ611TCBkU",
+          authDomain: "garconapp-e2991.firebaseapp.com",
+          projectId: "garconapp-e2991",
+          storageBucket: "garconapp-e2991.appspot.com",
+          messagingSenderId: "870452793362",
+          appId: "1:870452793362:web:12a1a5225ffadb3de348cb"));
   runApp(const MyApp());
 }
 
@@ -72,7 +72,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
         BlocProvider(create: (_) => CartBloc()),
       ],
       child: Scaffold(
-        appBar: new HomeAppBar(),
+        appBar: HomeAppBar(),
         body: MultiBlocProvider(
           providers: [
             BlocProvider(create: (_) => MonitorItemBloc()),

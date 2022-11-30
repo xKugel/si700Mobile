@@ -49,11 +49,11 @@ Widget authenticatedWidget(BuildContext context) {
             },
             child: const Icon(Icons.logout)),
         appBar: AppBar(
-            title: const Text("widget.title"),
+            title: const Text("Itens do cardápio"),
             bottom: const TabBar(
               tabs: [
-                Tab(icon: Icon(Icons.directions)),
-                Tab(icon: Icon(Icons.ac_unit))
+                Tab(icon: Icon(Icons.add)),
+                Tab(icon: Icon(Icons.checklist))
               ],
             )),
         body: const Text("Autenticado")
