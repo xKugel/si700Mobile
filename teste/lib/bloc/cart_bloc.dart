@@ -2,6 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:teste/models/MenuItemModel.dart';
 import 'package:teste/models/OrderItemModel.dart';
 import 'package:teste/models/OrderModel.dart';
+import 'package:teste/provider/firebase_firestore.dart';
 import 'package:teste/provider/local_database.dart';
 
 class CartBloc extends Bloc<CartEvent, CartState> {
@@ -55,7 +56,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
 
     on<OrderEvent>((event, emit) async {
       if (state is CartInsertState) {
-        await LocalDatabase.helper.findOrCreateOrder(OrderModel.withData(
+        await FirestoreDatabase.helper.findOrCreateOrder(OrderModel.withData(
             status: 'A', itensList: listOrder, tableNumber: tableNumber));
       }
       listOrder = [];

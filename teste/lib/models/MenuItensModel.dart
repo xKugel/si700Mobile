@@ -19,7 +19,6 @@ class MenuItensModel {
         id: menuItem.id,
         name: menuItem.name,
         value: menuItem.value,
-        active: menuItem.active,
         imageURL: menuItem.imageURL);
   }
 
@@ -44,7 +43,6 @@ class MenuItensModel {
           id: menuItem.id,
           name: menuItem.name,
           value: menuItem.value,
-          active: menuItem.active,
           imageURL: menuItem.imageURL);
     } else {
       idList.add(id);
@@ -53,7 +51,6 @@ class MenuItensModel {
             id: menuItem.id,
             name: menuItem.name,
             value: menuItem.value,
-            active: menuItem.active,
             imageURL: menuItem.imageURL),
       );
     }
@@ -66,7 +63,6 @@ class MenuItensModel {
           id: menuItem.id,
           name: menuItem.name,
           value: menuItem.value,
-          active: menuItem.active,
           imageURL: menuItem.imageURL);
     }
   }
@@ -86,7 +82,6 @@ class MenuItensModel {
           id: menuItem.id,
           name: menuItem.name,
           value: menuItem.value,
-          active: menuItem.active,
           imageURL: menuItem.imageURL),
     );
   }

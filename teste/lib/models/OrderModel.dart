@@ -1,8 +1,7 @@
-
 import 'package:teste/models/OrderItemModel.dart';
 
 class OrderModel {
-  int? _id;
+  String? _id;
   int _tableNumber = 0;
   String _status = 'A';
   List<OrderItemModel> _itensList = [];
@@ -31,12 +30,19 @@ class OrderModel {
     _itensList = itensList;
   }
 
-  int? get id => _id;
+  OrderModel.fromDoc(id, map, List<OrderItemModel> itensList) {
+    _id = id.toString();
+    _tableNumber = map['table_number'];
+    _status = map['status'];
+    _itensList = itensList;
+  }
+
+  String? get id => _id;
   int get tableNumber => _tableNumber;
   String get status => _status;
   List<OrderItemModel> get itensList => _itensList;
 
-  set id(int? id) {
+  set id(String? id) {
     _id = id;
   }
 

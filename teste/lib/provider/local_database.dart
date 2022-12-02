@@ -33,7 +33,7 @@ class LocalDatabase {
   String itemValor = "value";
   String itemNome = "name";
   String itemAtivo = "active";
-  String itemImagemUrl = "image_url";
+  String itemImagemUrl = "img_url";
 
   // Pedidos
   String pedidoTable = 'orders';
@@ -100,7 +100,7 @@ class LocalDatabase {
       List<Map> foundItens = await db.rawQuery("select * from $itemTable;");
       if (foundItens.length == 0) {
         await db.execute("""
-        INSERT INTO $itemTable (image_url, name ,value) VALUES
+        INSERT INTO $itemTable (img_url, name ,value) VALUES
             ('https://blog.biglar.com.br/wp-content/uploads/2021/10/typical-brazilian-dish-called-feijoada-made-with-black-beans-pork-sausage.jpg',
             'Feijoada',
             4300),
@@ -180,7 +180,7 @@ class LocalDatabase {
     return result;
   }
 
-  Future<List<OrderItemModel>> findOrderItensByOrderId(int? orderId) async {
+  Future<List<OrderItemModel>> findOrderItensByOrderId(String? orderId) async {
     Database? db = await database;
     if (orderId == null) {
       return [];

@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:teste/models/MenuItensModel.dart';
+import 'package:teste/provider/firebase_firestore.dart';
 
 import '../provider/local_database.dart';
 
@@ -9,7 +10,7 @@ class MonitorItemBloc extends Bloc<MonitorEvent, MonitorItemState> {
   MonitorItemBloc()
       : super(MonitorItemState(itensCollection: MenuItensModel())) {
     on<AskNewList>((event, emit) async {
-      itensCollection = await LocalDatabase.helper.getItemList();
+      itensCollection = await FirestoreDatabase.helper.getItemList();
       emit(MonitorItemState(itensCollection: itensCollection));
     });
 

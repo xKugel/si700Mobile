@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:teste/bloc/auth_bloc.dart';
+import 'package:teste/bloc/monitor_order_list_bloc.dart';
 import 'package:teste/screens/LoginScreen.dart';
+import 'package:teste/screens/OrderListScreen.dart';
 
 class Wrapper extends StatefulWidget {
   const Wrapper({Key? key}) : super(key: key);
@@ -43,33 +45,21 @@ Widget authenticatedWidget(BuildContext context) {
   return DefaultTabController(
     length: 2,
     child: Scaffold(
-        floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              BlocProvider.of<AuthBloc>(context).add(Logout());
-            },
-            child: const Icon(Icons.logout)),
-        appBar: AppBar(
-            title: const Text("Itens do cardápio"),
-            bottom: const TabBar(
-              tabs: [
-                Tab(icon: Icon(Icons.add)),
-                Tab(icon: Icon(Icons.checklist))
-              ],
-            )),
-        body: const Text("Autenticado")
-        // body: MultiBlocProvider(
-        //   providers: [
-        //     BlocProvider(create: (_) => ManageBloc()),
-        //     BlocProvider(create: (_) => MonitorBloc()),
-        //   ],
-        //   child: TabBarView(
-        //     children: [
-        //       AddNote(),
-        //       ListNote(),
-        //     ],
-        //   ),
-        // )
-        ),
+      floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            BlocProvider.of<AuthBloc>(context).add(Logout());
+          },
+          child: const Icon(Icons.logout)),
+      appBar: AppBar(
+        title: const Text("Pedidos"),
+      ),
+      body: MultiBlocProvider(
+        providers: [
+          BlocProvider(create: (_) => MonitorOrderListBloc()),
+        ],
+        child: Center(child: OrderListScreen()),
+      ),
+    ),
   );
 }
 

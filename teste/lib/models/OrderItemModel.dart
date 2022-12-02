@@ -2,7 +2,7 @@ import 'package:teste/models/MenuItemModel.dart';
 import 'package:teste/models/OrderModel.dart';
 
 class OrderItemModel {
-  int? _id;
+  String? _id;
   MenuItemModel _item = MenuItemModel();
   OrderModel _order = OrderModel();
   int _quantity = 0;
@@ -36,10 +36,17 @@ class OrderItemModel {
         itensList: []);
   }
 
+  OrderItemModel.fromDoc(ref, map, item, order) {
+    _id = ref;
+    _quantity = map['quantity'];
+    _item = MenuItemModel.fromDoc(item['id'], item);
+    _order = OrderModel.fromDoc(order["id"], order, []);
+  }
+
   MenuItemModel get item => _item;
   OrderModel get order => _order;
   int get quantity => _quantity;
-  int? get id => _id;
+  String? get id => _id;
 
   set item(MenuItemModel item) {
     _item = item;
@@ -53,7 +60,7 @@ class OrderItemModel {
     _quantity = quantity;
   }
 
-  set id(int? id) {
+  set id(String? id) {
     _id = id;
   }
 
